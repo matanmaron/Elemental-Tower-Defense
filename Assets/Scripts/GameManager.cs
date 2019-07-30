@@ -6,54 +6,65 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject panelMenu;
-    [SerializeField]
-    private GameObject panelUI;
-    [SerializeField]
-    private Text startText;
+	[SerializeField]
+	private GameObject panelMenu;
+	[SerializeField]
+	private GameObject panelUI;
+	[SerializeField]
+	private Text startText;
 
-    private bool isPaused;
+	private bool isFirstBoot;
+	private bool isPaused;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        isPaused = false;
-        PauseOnOff(true);
-    }
+	// Start is called before the first frame update
+	void Start()
+	{
+		isFirstBoot = true;
+		isPaused = false;
+		PauseOnOff();
+	}
 
-    private void PauseOnOff(bool isFirstBoot = false)
-    {
-        isPaused = !isPaused;
-        panelMenu.SetActive(isPaused);
-        panelUI.SetActive(!isPaused);
-    }
+	private void PauseOnOff()
+	{
+		isPaused = !isPaused;
+		panelMenu.SetActive(isPaused);
+		panelUI.SetActive(!isPaused);
+	}
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	// Update is called once per frame
+	void Update()
+	{
 
-    public void onButtonClickQuit()
-    {
-        QuitGame();
-    }
+	}
 
-    public void onButtonClickStart()
-    {
-        StartGame();
-    }
+	public void onButtonClickQuit()
+	{
+		QuitGame();
+	}
 
-    private void StartGame()
-    {
-        Debug.Log("Start Game");
-        startText.text = "Resume Game";
-    }
+	public void onButtonClickStart()
+	{
+		StartGame();
+	}
 
-    private void QuitGame()
-    {
-        Debug.Log("quit game");
-        Application.Quit();
-    }
+	private void StartGame()
+	{
+		if (isFirstBoot)
+		{
+			Debug.Log("Start Game");
+			startText.text = "Resume Game";
+			isFirstBoot = false;
+		}
+		else
+		{
+			Debug.Log("Resume Game");
+		}
+		PauseOnOff();
+	}
+
+	private void QuitGame()
+	{
+		Debug.Log("quit game");
+		Application.Quit();
+	}
 }
