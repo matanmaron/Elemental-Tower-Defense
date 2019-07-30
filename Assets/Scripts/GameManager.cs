@@ -10,20 +10,19 @@ public class GameManager : MonoBehaviour
     private GameObject panelMenu;
     [SerializeField]
     private GameObject panelUI;
+    [SerializeField]
+    private Text startText;
 
     private bool isPaused;
-    private bool isFirstBoot;
 
     // Start is called before the first frame update
     void Start()
     {
-        isFirstBoot = true;
         isPaused = false;
-        PauseOnOff();
-        
+        PauseOnOff(true);
     }
 
-    private void PauseOnOff()
+    private void PauseOnOff(bool isFirstBoot = false)
     {
         isPaused = !isPaused;
         panelMenu.SetActive(isPaused);
@@ -48,7 +47,8 @@ public class GameManager : MonoBehaviour
 
     private void StartGame()
     {
-        throw new NotImplementedException();
+        Debug.Log("Start Game");
+        startText.text = "Resume Game";
     }
 
     private void QuitGame()

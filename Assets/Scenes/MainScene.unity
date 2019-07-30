@@ -445,7 +445,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 898376334}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1795104863}
+        m_MethodName: onButtonClickStart
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &898376334
@@ -828,7 +839,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1328184149}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1795104863}
+        m_MethodName: onButtonClickQuit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1328184149
@@ -1039,7 +1061,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5737690f87b58401cab45addb8a85200, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvas: {fileID: 919530280}
+  panelMenu: {fileID: 1328184146}
+  panelUI: {fileID: 469133400}
+  startText: {fileID: 1182850499}
 --- !u!4 &1795104864
 Transform:
   m_ObjectHideFlags: 0
