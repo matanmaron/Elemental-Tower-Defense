@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-	[SerializeField]
+    #region outFields
+    [SerializeField]
 	private GameObject panelMenu;
 	[SerializeField]
 	private GameObject panelUI;
@@ -15,10 +16,23 @@ public class GameManager : MonoBehaviour
 
 	private bool isFirstBoot;
 	private bool isPaused;
+    private Towers currTower;
+    #endregion outFields
 
-	// Start is called before the first frame update
-	void Start()
+    #region enums
+    enum Towers
+    {
+        None,
+        ArcherTower,
+        CannonTower
+    }
+    #endregion enums
+
+    #region private functions
+    // Start is called before the first frame update
+    void Start()
 	{
+        currTower = Towers.None;
 		isFirstBoot = true;
 		isPaused = false;
 		PauseOnOff();
@@ -37,7 +51,44 @@ public class GameManager : MonoBehaviour
 
 	}
 
-	public void onButtonClickQuit()
+    private void StartGame()
+    {
+        if (isFirstBoot)
+        {
+            Debug.Log("Start Game");
+            startText.text = "Resume Game";
+            isFirstBoot = false;
+        }
+        else
+        {
+            Debug.Log("Resume Game");
+        }
+        PauseOnOff();
+    }
+
+    private void QuitGame()
+    {
+        Debug.Log("quit game");
+        Application.Quit();
+    }
+
+    private void ClickArcherTower()
+    {
+        if (currTower != Towers.ArcherTower)
+        {
+            Debug.Log("archer tower chosen");
+            currTower = Towers.ArcherTower;
+        }
+        else
+        {
+            Debug.Log("none tower chosen");
+            currTower = Towers.None;
+        }
+    }
+    #endregion private functions
+
+    #region public funtions
+    public void onButtonClickQuit()
 	{
 		QuitGame();
 	}
@@ -47,24 +98,9 @@ public class GameManager : MonoBehaviour
 		StartGame();
 	}
 
-	private void StartGame()
-	{
-		if (isFirstBoot)
-		{
-			Debug.Log("Start Game");
-			startText.text = "Resume Game";
-			isFirstBoot = false;
-		}
-		else
-		{
-			Debug.Log("Resume Game");
-		}
-		PauseOnOff();
-	}
-
-	private void QuitGame()
-	{
-		Debug.Log("quit game");
-		Application.Quit();
-	}
+    public void onButtonClickArcherTower()
+    {
+        ClickArcherTower();
+    }
+    #endregion public functions
 }
