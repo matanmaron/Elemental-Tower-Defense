@@ -6,18 +6,20 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    #region outFields
+    #region PublicFields
     [SerializeField]
 	private GameObject panelMenu;
 	[SerializeField]
 	private GameObject panelUI;
 	[SerializeField]
 	private Text startText;
+    #endregion PublicFields
 
-	private bool isFirstBoot;
+    #region PrivateFields
+    private bool isFirstBoot;
 	private bool isPaused;
     private Towers currTower;
-    #endregion outFields
+    #endregion PrivateFields
 
     #region enums
     enum Towers
@@ -48,20 +50,33 @@ public class GameManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+        //input and movment
 
 	}
 
+    private void LateUpdate()
+    {
+        //folowing camera
+
+    }
+
+    private void FixedUpdate()
+    {
+        //for all physics
+
+    }
+
     private void StartGame()
     {
-        if (isFirstBoot)
+        if (!isFirstBoot)
+        {
+            Debug.Log("Resume Game");
+        }
+        else
         {
             Debug.Log("Start Game");
             startText.text = "Resume Game";
             isFirstBoot = false;
-        }
-        else
-        {
-            Debug.Log("Resume Game");
         }
         PauseOnOff();
     }
@@ -85,6 +100,20 @@ public class GameManager : MonoBehaviour
             currTower = Towers.None;
         }
     }
+
+    private void ClickCannonTower()
+    {
+        if (currTower != Towers.ArcherTower)
+        {
+            Debug.Log("cannon tower chosen");
+            currTower = Towers.CannonTower;
+        }
+        else
+        {
+            Debug.Log("none tower chosen");
+            currTower = Towers.None;
+        }
+    }
     #endregion private functions
 
     #region public funtions
@@ -101,6 +130,11 @@ public class GameManager : MonoBehaviour
     public void onButtonClickArcherTower()
     {
         ClickArcherTower();
+    }
+
+    public void onButtonClickCannonTower()
+    {
+        ClickCannonTower();
     }
     #endregion public functions
 }
