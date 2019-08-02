@@ -13,12 +13,15 @@ public class GameManager : MonoBehaviour
 	private GameObject panelUI;
 	[SerializeField]
 	private Text startText;
+    [SerializeField]
+    private GameObject ArchTower;
     #endregion PublicFields
 
     #region PrivateFields
     private bool isFirstBoot;
 	private bool isPaused;
-    private Towers currTower;
+    private Towers currTowerType;
+    private GameObject currTower;
     #endregion PrivateFields
 
     #region enums
@@ -34,8 +37,9 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
 	{
-        currTower = Towers.None;
-		isFirstBoot = true;
+        currTowerType = Towers.None;
+        currTower = null;
+        isFirstBoot = true;
 		isPaused = false;
 		PauseOnOff();
 	}
@@ -50,8 +54,27 @@ public class GameManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            PauseOnOff();
+        }
         //input and movment
-
+        if (currTower != null)
+        {
+            Debug.Log("moving tower");
+            currTower.transform.position = new Vector3(Input.mousePosition.x, 0, Input.mousePosition.y);
+        }
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (currTower != null)
+            {
+                Debug.Log("placing tower");
+                //Color32 col = currTower.GetComponent<MeshRenderer>().material.color;
+                //col.a = 255;
+                currTower = null;
+                currTowerType = Towers.None;
+            }
+        }
 	}
 
     private void LateUpdate()
@@ -89,29 +112,37 @@ public class GameManager : MonoBehaviour
 
     private void ClickArcherTower()
     {
-        if (currTower != Towers.ArcherTower)
+        if (currTowerType != Towers.ArcherTower)
         {
             Debug.Log("archer tower chosen");
-            currTower = Towers.ArcherTower;
+            currTowerType = Towers.ArcherTower;
+            currTower = Instantiate(ArchTower);
+            currTower.transform.position = Input.mousePosition;
+            //Color32 col = currTower.GetComponent<MeshRenderer>().material.color;
+            //col.a = 150;
         }
         else
         {
             Debug.Log("none tower chosen");
-            currTower = Towers.None;
+            currTowerType = Towers.None;
         }
     }
 
     private void ClickCannonTower()
     {
-        if (currTower != Towers.ArcherTower)
+        if (currTower != null)
+        {
+            Destroy(currTower);
+        }
+        if (currTowerType != Towers.CannonTower)
         {
             Debug.Log("cannon tower chosen");
-            currTower = Towers.CannonTower;
+            currTowerType = Towers.CannonTower;
         }
         else
         {
             Debug.Log("none tower chosen");
-            currTower = Towers.None;
+            currTowerType = Towers.None;
         }
     }
     #endregion private functions
