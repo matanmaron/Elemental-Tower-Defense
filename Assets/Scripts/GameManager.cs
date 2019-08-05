@@ -14,7 +14,15 @@ public class GameManager : MonoBehaviour
 	[SerializeField]
 	private Text startText;
     [SerializeField]
-    private GameObject ArchTower;
+    private GameObject FireTower;
+    [SerializeField]
+    private GameObject TowerBuild;
+    [SerializeField]
+    private GameObject WaterTower;
+    [SerializeField]
+    private GameObject EarthTower;
+    [SerializeField]
+    private GameObject WindTower;
     #endregion PublicFields
 
     #region PrivateFields
@@ -28,8 +36,10 @@ public class GameManager : MonoBehaviour
     enum Towers
     {
         None,
-        ArcherTower,
-        CannonTower
+        FireTower,
+        WaterTower,
+        EarthTower,
+        WindTower
     }
     #endregion enums
 
@@ -64,18 +74,45 @@ public class GameManager : MonoBehaviour
             Debug.Log("moving tower");
             currTower.transform.position = new Vector3(Input.mousePosition.x, 0, Input.mousePosition.y);
         }
+        //place tower
         if (Input.GetMouseButtonDown(0))
         {
             if (currTower != null)
             {
-                Debug.Log("placing tower");
-                //Color32 col = currTower.GetComponent<MeshRenderer>().material.color;
-                //col.a = 255;
-                currTower = null;
-                currTowerType = Towers.None;
+                SetTower();
             }
         }
 	}
+
+    private void SetTower()
+    {
+        Debug.Log("placing tower");
+        switch (currTowerType)
+        {
+            case (Towers.FireTower):
+                SetTower(FireTower);
+                break;
+            case (Towers.WaterTower):
+                SetTower(WaterTower);
+                break;
+            case (Towers.EarthTower):
+                SetTower(EarthTower);
+                break;
+            case (Towers.WindTower):
+                SetTower(WindTower);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void SetTower(GameObject Tower)
+    {
+        Instantiate(Tower, currTower.transform);
+        Destroy(currTower);
+        currTower = null;
+        currTowerType = Towers.None;
+    }
 
     private void LateUpdate()
     {
@@ -110,16 +147,14 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
 
-    private void ClickArcherTower()
+    private void ClickFireTower()
     {
-        if (currTowerType != Towers.ArcherTower)
+        if (currTowerType != Towers.FireTower)
         {
-            Debug.Log("archer tower chosen");
-            currTowerType = Towers.ArcherTower;
-            currTower = Instantiate(ArchTower);
+            Debug.Log("Fire tower chosen");
+            currTowerType = Towers.FireTower;
+            currTower = MakeTower(FireTower);
             currTower.transform.position = Input.mousePosition;
-            //Color32 col = currTower.GetComponent<MeshRenderer>().material.color;
-            //col.a = 150;
         }
         else
         {
@@ -128,23 +163,38 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void ClickCannonTower()
+    private GameObject MakeTower(GameObject tower)
     {
-        if (currTower != null)
+        Vector3 wordPos;
+        Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f);
+        Ray ray = Camera.main.ScreenPointToRay(mousePos);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 1000f))
         {
-            Destroy(currTower);
-        }
-        if (currTowerType != Towers.CannonTower)
-        {
-            Debug.Log("cannon tower chosen");
-            currTowerType = Towers.CannonTower;
+            wordPos = hit.point;
         }
         else
         {
-            Debug.Log("none tower chosen");
-            currTowerType = Towers.None;
+            wordPos = Camera.main.ScreenToWorldPoint(mousePos);
         }
+        return Instantiate(tower, wordPos, Quaternion.identity);
     }
+
+    private void ClickWaterTower()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void ClickEarthTower()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void ClickWindTower()
+    {
+        throw new NotImplementedException();
+    }
+
     #endregion private functions
 
     #region public funtions
@@ -158,14 +208,25 @@ public class GameManager : MonoBehaviour
 		StartGame();
 	}
 
-    public void onButtonClickArcherTower()
+    public void onButtonClickFireTower()
     {
-        ClickArcherTower();
+        ClickFireTower();
     }
 
-    public void onButtonClickCannonTower()
+    public void onButtonClickWaterTower()
     {
-        ClickCannonTower();
+        ClickWaterTower();
     }
+
+    public void onButtonClickEarthTower()
+    {
+        ClickEarthTower();
+    }
+
+    public void onButtonClickWindTower()
+    {
+        ClickWindTower();
+    }
+
     #endregion public functions
 }
