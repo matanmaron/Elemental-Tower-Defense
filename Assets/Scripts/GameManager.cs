@@ -108,7 +108,9 @@ public class GameManager : MonoBehaviour
 
     private void SetTower(GameObject Tower)
     {
-        Instantiate(Tower, currTower.transform);
+        var t = Instantiate(Tower); 
+        t.transform.position = new Vector3(Input.mousePosition.x, 0, Input.mousePosition.y);
+        //t.transform.position = currTower.transform.position;
         Destroy(currTower);
         currTower = null;
         currTowerType = Towers.None;
@@ -153,8 +155,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Fire tower chosen");
             currTowerType = Towers.FireTower;
-            currTower = MakeTower(FireTower);
-            currTower.transform.position = Input.mousePosition;
+            currTower = MakeTower();
         }
         else
         {
@@ -163,7 +164,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private GameObject MakeTower(GameObject tower)
+    private GameObject MakeTower()
     {
         Vector3 wordPos;
         Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f);
@@ -177,7 +178,7 @@ public class GameManager : MonoBehaviour
         {
             wordPos = Camera.main.ScreenToWorldPoint(mousePos);
         }
-        return Instantiate(tower, wordPos, Quaternion.identity);
+        return Instantiate(TowerBuild, wordPos, Quaternion.identity);
     }
 
     private void ClickWaterTower()

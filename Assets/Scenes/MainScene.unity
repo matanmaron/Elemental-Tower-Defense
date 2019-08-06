@@ -235,7 +235,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -30.50003, y: -179.3}
+  m_AnchoredPosition: {x: -30.5, y: -179.3}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &150598882
@@ -478,7 +478,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 492745398}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1795104863}
+        m_MethodName: onButtonClickFireTower
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &492745398
@@ -1628,7 +1639,12 @@ MonoBehaviour:
   panelMenu: {fileID: 1737671662}
   panelUI: {fileID: 469133400}
   startText: {fileID: 1182850499}
-  FireTower: {fileID: 0}
+  FireTower: {fileID: 187918, guid: 77a599bd67f72e24999e1d5d60f433d0, type: 3}
+  TowerBuild: {fileID: 5522324662860457629, guid: 0704ee425845c49bb8a9b0936f214b31,
+    type: 3}
+  WaterTower: {fileID: 0}
+  EarthTower: {fileID: 0}
+  WindTower: {fileID: 0}
 --- !u!4 &1795104864
 Transform:
   m_ObjectHideFlags: 0
