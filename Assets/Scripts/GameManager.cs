@@ -52,9 +52,15 @@ public class GameManager : MonoBehaviour
         isFirstBoot = true;
 		isPaused = false;
 		PauseOnOff();
+        SpawnWave();
 	}
 
-	private void PauseOnOff()
+    private void SpawnWave()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void PauseOnOff()
 	{
 		isPaused = !isPaused;
 		panelMenu.SetActive(isPaused);
@@ -72,7 +78,7 @@ public class GameManager : MonoBehaviour
         if (currTower != null)
         {
             Debug.Log("moving tower");
-            currTower.transform.position = new Vector3(Input.mousePosition.x, 0, Input.mousePosition.y);
+            currTower.transform.position = GetMouseOnScreen();
         }
         //place tower
         if (Input.GetMouseButtonDown(0))
@@ -83,6 +89,23 @@ public class GameManager : MonoBehaviour
             }
         }
 	}
+
+    private Vector3 GetMouseOnScreen()
+    {
+        Vector3 wordPos;
+        Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f);
+        Ray ray = Camera.main.ScreenPointToRay(mousePos);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 1000f))
+        {
+            wordPos = hit.point;
+        }
+        else
+        {
+            wordPos = Camera.main.ScreenToWorldPoint(mousePos);
+        }
+        return wordPos;
+    }
 
     private void SetTower()
     {
@@ -108,8 +131,8 @@ public class GameManager : MonoBehaviour
 
     private void SetTower(GameObject Tower)
     {
-        var t = Instantiate(Tower); 
-        t.transform.position = new Vector3(Input.mousePosition.x, 0, Input.mousePosition.y);
+        var t = Instantiate(Tower);
+        t.transform.position = GetMouseOnScreen();
         //t.transform.position = currTower.transform.position;
         Destroy(currTower);
         currTower = null;
@@ -166,19 +189,8 @@ public class GameManager : MonoBehaviour
 
     private GameObject MakeTower()
     {
-        Vector3 wordPos;
-        Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f);
-        Ray ray = Camera.main.ScreenPointToRay(mousePos);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 1000f))
-        {
-            wordPos = hit.point;
-        }
-        else
-        {
-            wordPos = Camera.main.ScreenToWorldPoint(mousePos);
-        }
-        return Instantiate(TowerBuild, wordPos, Quaternion.identity);
+
+        return Instantiate(TowerBuild, new Vector3(0,0,0), Quaternion.identity);
     }
 
     private void ClickWaterTower()
