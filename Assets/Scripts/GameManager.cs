@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
     private GameObject currTower;
     private float Timer;
     private List<GameObject> Enemys;
+    private int Money;
     #endregion PrivateFields
 
     #region enums
@@ -59,6 +60,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
 	{
+        Money = 0;
         TimerText.text = string.Empty;
         currTowerType = Towers.None;
         currTower = null;
