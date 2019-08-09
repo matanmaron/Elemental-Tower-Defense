@@ -23,6 +23,16 @@ public class GameManager : MonoBehaviour
     private GameObject EarthTower;
     [SerializeField]
     private GameObject WindTower;
+    [SerializeField]
+    private Transform StartPoint;
+    [SerializeField]
+    private Transform EndPoint;
+    [SerializeField]
+    private int WaveSize;
+    [SerializeField]
+    private GameObject Enemy1Spiders;
+    [SerializeField]
+    private Text TimerText;
     #endregion PublicFields
 
     #region PrivateFields
@@ -30,6 +40,8 @@ public class GameManager : MonoBehaviour
 	private bool isPaused;
     private Towers currTowerType;
     private GameObject currTower;
+    private float Timer;
+    private List<GameObject> Enemys;
     #endregion PrivateFields
 
     #region enums
@@ -47,24 +59,56 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
 	{
+        TimerText.text = string.Empty;
         currTowerType = Towers.None;
         currTower = null;
         isFirstBoot = true;
 		isPaused = false;
-		PauseOnOff();
-        SpawnWave();
+        Enemys = new List<GameObject>();
+		TogglePause();
+        SetTimer();
 	}
+
+    private void SetTimer()
+    {
+        Timer = 5f;
+        TimerText.text = Timer.ToString();
+    }
 
     private void SpawnWave()
     {
-        throw new NotImplementedException();
+        if (!isPaused)
+        {
+            if(Timer < 0)
+            {
+                TimerText.text = string.Empty;
+                int sec = 0;
+                for (int i = 0; i < WaveSize; i++)
+                {
+                    Invoke("SpawnEnemys",sec);
+                    sec+=4;
+                }
+            }
+            else
+            {
+                Timer -= Time.deltaTime; 
+                TimerText.text = Timer.ToString();
+            }
+        }
     }
 
-    private void PauseOnOff()
+    private void SpawnEnemys()
+    {
+        Enemys.Add(Instantiate(Enemy1Spiders,StartPoint.transform.position,StartPoint.transform.rotation));
+    }
+
+    private void TogglePause()
 	{
 		isPaused = !isPaused;
 		panelMenu.SetActive(isPaused);
 		panelUI.SetActive(!isPaused);
+        Time.timeScale = isPaused? 0 : 1;
+        Debug.Log("time is "+Time.timeScale.ToString());
 	}
 
 	// Update is called once per frame
@@ -72,7 +116,7 @@ public class GameManager : MonoBehaviour
 	{
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            PauseOnOff();
+            TogglePause();
         }
         //input and movment
         if (currTower != null)
@@ -87,6 +131,11 @@ public class GameManager : MonoBehaviour
             {
                 SetTower();
             }
+        }
+        //spawn enemys
+        if(Enemys.Count < 1)
+        {
+           SpawnWave();
         }
 	}
 
@@ -163,7 +212,7 @@ public class GameManager : MonoBehaviour
             startText.text = "Resume Game";
             isFirstBoot = false;
         }
-        PauseOnOff();
+        TogglePause();
     }
 
     private void QuitGame()
