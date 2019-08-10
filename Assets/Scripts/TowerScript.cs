@@ -4,15 +4,35 @@ using UnityEngine;
 
 public class TowerScript : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private bool ShowField = false;
+	ParticleSystem field;
+	void Start()
+    {
+        field = GetComponent<ParticleSystem>();
+        field.Stop();
+    }
+
+    void Update()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ToggleField()
     {
-        
+        ShowField = !ShowField;
+        if (field != null)
+        {
+
+            if (ShowField)
+            {
+                field.Play();
+            }
+            else
+            {
+                field.Stop();
+            }
+
+            Debug.Log("Field is " + ShowField.ToString());
+        }
     }
 }

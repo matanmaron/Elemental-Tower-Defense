@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour
         //input and movment
         if (currTower != null)
         {
-            Debug.Log("moving tower");
+            //Debug.Log("moving tower");
             currTower.transform.position = GetMouseOnScreen();
         }
         //place tower
@@ -133,6 +133,10 @@ public class GameManager : MonoBehaviour
             {
                 SetTower();
             }
+            else
+            {
+                CastRay();
+            }
         }
         //spawn enemys
         if(Enemys.Count < 1)
@@ -140,6 +144,21 @@ public class GameManager : MonoBehaviour
            SpawnWave();
         }
 	}
+
+    private void CastRay()
+    {
+        Debug.Log("cast ray..");
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 1000)) {            
+            Debug.Log("ray hits: " + hit.collider.gameObject.name);
+            var sct = hit.collider.gameObject.GetComponent<TowerScript>();
+            if (sct != null)
+            {
+                sct.ToggleField();
+            }
+        }    
+    }
 
     private Vector3 GetMouseOnScreen()
     {

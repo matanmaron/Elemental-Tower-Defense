@@ -28,7 +28,7 @@ public class EnemyScript : MonoBehaviour
 
     private void WalkAnim()
     {
-        Debug.Log("Walking Anim");
+        //Debug.Log("Walking Anim");
         anim.Play("walk");
     }
 
