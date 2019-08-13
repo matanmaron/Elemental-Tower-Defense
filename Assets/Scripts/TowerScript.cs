@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class TowerScript : MonoBehaviour
 {
-    private bool ShowField = false;
+    public bool ShowField = false;
 	ParticleSystem field;
 	void Start()
     {
-        field = GetComponent<ParticleSystem>();
+        field = GameObject.Find("FieldEffect").GetComponent<ParticleSystem>();
         field.Stop();
     }
 
     void Update()
     {
-        
+
     }
 
     public void ToggleField()
@@ -29,7 +29,7 @@ public class TowerScript : MonoBehaviour
             }
             else
             {
-                field.Stop();
+                field.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
             }
 
             Debug.Log("Field is " + ShowField.ToString());
