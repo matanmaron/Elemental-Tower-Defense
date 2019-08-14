@@ -8,18 +8,24 @@ using UnityEngine.UI;
 public class EnemyScript : MonoBehaviour
 {
     [SerializeField]
+    private GameObject enemy;
+    [SerializeField]
     private GameObject EndPoint;
     [SerializeField]
-    private int Health;
-    [SerializeField]
     private Image HealthBar;
-    private int StartHealth;
+    [SerializeField]
+    private float StartHealth;
+
+    private GameManager gameManager;
     private NavMeshAgent Nav;
     private Animator anim;
+
+    private float Health;
     // Start is called before the first frame update
     void Start()
     {
-        StartHealth = Health;
+        Health = StartHealth;
+        gameManager = GameObject.Find("GameManagerHolder").GetComponent<GameManager>();
         Nav = GetComponent<NavMeshAgent>();
         anim = gameObject.GetComponent<Animator>();
         GoToTarget();
@@ -42,18 +48,23 @@ public class EnemyScript : MonoBehaviour
         Nav.SetDestination(EndPoint.transform.position);
     }
 
-    public void TakeDamage(int amount)
+    internal void TakeDamage(int amount)
     {
         Health -= amount;
+        Debug.Log("health is " + Health);
         HealthBar.fillAmount = Health / StartHealth;
-        if (Health < 1)
+
+        if (Health <= 0f)
         {
+            Debug.Log("dead...");
             Die();
         }
     }
 
     private void Die()
     {
-        Destroy(this);
+        gameManager.RemoveEnemy(enemy);
+        Destroy(enemy);
     }
+
 }

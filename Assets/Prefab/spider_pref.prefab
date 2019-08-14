@@ -1111,10 +1111,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d713f616e0f554f869e8819ceeadfd3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemy: {fileID: 1715103906888602}
   EndPoint: {fileID: 2506536165306650693, guid: 55e6f14b71de340dcac273f68102dd14,
     type: 3}
-  Health: 100
   HealthBar: {fileID: 3582234329142622335}
+  StartHealth: 10
 --- !u!54 &7646550623155307983
 Rigidbody:
   m_ObjectHideFlags: 0

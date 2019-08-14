@@ -30,9 +30,11 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private int WaveSize;
     [SerializeField]
-    private GameObject Enemy1Spiders;
+    private EnemyScript Enemy1Spiders;
     [SerializeField]
     private Text TimerText;
+
+    public List<EnemyScript> Enemys;
     #endregion PublicFields
 
     #region PrivateFields
@@ -41,7 +43,6 @@ public class GameManager : MonoBehaviour
     private Towers currTowerType;
     private GameObject currTower;
     private float Timer;
-    private List<GameObject> Enemys;
     private int Money;
     #endregion PrivateFields
 
@@ -53,6 +54,11 @@ public class GameManager : MonoBehaviour
         WaterTower,
         EarthTower,
         WindTower
+    }
+
+    internal void RemoveEnemy(GameObject enemy)
+    {
+        Enemys.Remove(enemy.GetComponent<EnemyScript>());
     }
     #endregion enums
 
@@ -66,7 +72,7 @@ public class GameManager : MonoBehaviour
         currTower = null;
         isFirstBoot = true;
 		isPaused = false;
-        Enemys = new List<GameObject>();
+        Enemys = new List<EnemyScript>();
 		TogglePause();
         SetTimer();
 	}
