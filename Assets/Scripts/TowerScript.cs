@@ -11,11 +11,17 @@ public class TowerScript : MonoBehaviour
     [SerializeField]
     ParticleSystem field;
 
+    [SerializeField]
+    ParticleSystem fire;
+
+    [SerializeField]
+    Transform fireHolder;
+
     private bool ShowField;
     private GameManager gameManager;
     private bool Reloaded;
     const int RealodTime = 1;
-    int i = 0;
+    //int i = 0;
 	void Start()
     {
         Reloaded = true;
@@ -27,6 +33,18 @@ public class TowerScript : MonoBehaviour
     void Update()
     {
         IsEnemyInRange();
+    }
+
+    private void RotateFire(EnemyScript enemy)
+    {
+    //find the vector pointing from our position to the target
+        Vector3 _direction = (enemy.transform.position - fireHolder.transform.position).normalized;
+
+        //create the rotation we need to be in to look at the target
+        Quaternion _lookRotation = Quaternion.LookRotation(_direction);
+
+        //rotate us over time according to speed until we are in the required rotation
+        fireHolder.transform.rotation = Quaternion.Slerp(fireHolder.transform.rotation, _lookRotation, Time.deltaTime * 50);
     }
 
     public void ToggleField()
@@ -57,11 +75,14 @@ public class TowerScript : MonoBehaviour
                 //Debug.Log("in range");
                 if (Reloaded)
                 {
-                    Debug.Log("shoot " + i);
-                    i++;
+                    RotateFire(enemy);
+                    //Debug.Log("shoot " + i);
+                    //i++;
                     Shoot(enemy);
+                    ShootFire();
                     Reloaded = false;
                     Invoke("ReloadTimer", RealodTime);
+                    return;
                 }
             }
         }
@@ -70,6 +91,19 @@ public class TowerScript : MonoBehaviour
     private void Shoot(EnemyScript enemy)
     {
         enemy.TakeDamage(1);
+    }
+
+    private void ShootFire()
+    {
+        //Debug.Log("fire...");
+        fire.Play();
+        Invoke("ShootFireStop",1);
+    }
+
+    private void ShootFireStop()
+    {
+        fire.Stop();
+        //Debug.Log("stop fire...");
     }
 
     private void ReloadTimer()
