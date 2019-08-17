@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -11,7 +12,11 @@ public class GameManager : MonoBehaviour
 	private GameObject panelMenu;
 	[SerializeField]
 	private GameObject panelUI;
-	[SerializeField]
+    [SerializeField]
+    private GameObject panelWin;
+    [SerializeField]
+    private GameObject panelLose;
+    [SerializeField]
 	private Text startText;
     [SerializeField]
     private GameObject FireTower;
@@ -34,6 +39,12 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private EnemyScript Enemy2Pirates;
     [SerializeField]
+    private EnemyScript Enemy3Chicken;
+    [SerializeField]
+    private EnemyScript Enemy4Barbarian;
+    [SerializeField]
+    private EnemyScript Enemy5Knight;
+    [SerializeField]
     private Text TimerText;
     [SerializeField]
     private Text MoneyText;
@@ -53,7 +64,7 @@ public class GameManager : MonoBehaviour
     private bool StartTimer;
     private bool RunTimer;
     private int wave;
-
+    private bool isGameOver;
     internal int Life;
     internal int Money;
 
@@ -79,6 +90,9 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
 	{
+        isGameOver = false;
+        panelLose.SetActive(false);
+        panelWin.SetActive(false);
         wave = 1;
         RunNextWave = true;
         StartTimer = true;
@@ -112,14 +126,24 @@ public class GameManager : MonoBehaviour
         HealthText.text = Life.ToString();
         if (Life<=0)
         {
-            GameOver();
+            GameOverLose();
         }
     }
 
-    private void GameOver()
+    private void GameOverWin()
     {
-        Debug.Log("GameOver");
-        TogglePause();
+        isGameOver = true;
+        panelUI.SetActive(false);
+        Debug.Log("GameOver - win");
+        panelWin.SetActive(true);
+    }
+
+    private void GameOverLose()
+    {
+        isGameOver = true;
+        panelUI.SetActive(false);
+        Debug.Log("GameOver - lose");
+        panelLose.SetActive(true);
     }
 
     private void SpawnWave()
@@ -139,7 +163,12 @@ public class GameManager : MonoBehaviour
         {
             case 1: Enemys.Add(Instantiate(Enemy1Spiders,StartPoint.transform.position,StartPoint.transform.rotation)); break;
             case 2: Enemys.Add(Instantiate(Enemy2Pirates, StartPoint.transform.position, StartPoint.transform.rotation)); break;
+            case 3: Enemys.Add(Instantiate(Enemy3Chicken, StartPoint.transform.position, StartPoint.transform.rotation)); break;
+            case 4: Enemys.Add(Instantiate(Enemy4Barbarian, StartPoint.transform.position, StartPoint.transform.rotation)); break;
+            case 5: Enemys.Add(Instantiate(Enemy5Knight, StartPoint.transform.position, StartPoint.transform.rotation)); break;
             default:
+                Debug.Log("no more enemys...");
+                GameOverWin();
                 break;
         }
     }
@@ -156,6 +185,10 @@ public class GameManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+        if (isGameOver)
+        {
+            return;
+        }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             TogglePause();
@@ -319,6 +352,12 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
 
+    private void ResetGame()
+    {
+        Debug.Log("reset game");
+        SceneManager.LoadScene("MainScene"); //Load scene called Game
+    }
+
     private void ClickFireTower()
     {
         if (currTowerType != Towers.FireTower)
@@ -363,7 +402,12 @@ public class GameManager : MonoBehaviour
 		QuitGame();
 	}
 
-	public void onButtonClickStart()
+    public void onButtonClickReset()
+    {
+        ResetGame();
+    }
+
+    public void onButtonClickStart()
 	{
 		StartGame();
 	}
