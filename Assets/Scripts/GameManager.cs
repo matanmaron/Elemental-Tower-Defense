@@ -189,6 +189,7 @@ public class GameManager : MonoBehaviour
         {
             return;
         }
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             TogglePause();
@@ -317,6 +318,11 @@ public class GameManager : MonoBehaviour
             Money -= cost;
             SetMoney();
         }
+        else
+        {
+            currTower = null;
+            currTowerType = Towers.None;
+        }
     }
 
     private void LateUpdate()
@@ -358,12 +364,12 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("MainScene"); //Load scene called Game
     }
 
-    private void ClickFireTower()
+    private void ClickTower(Towers clicktype)
     {
-        if (currTowerType != Towers.FireTower)
+        if (currTowerType != clicktype)
         {
             Debug.Log("Fire tower chosen");
-            currTowerType = Towers.FireTower;
+            currTowerType = clicktype;
             currTower = MakeTower();
         }
         else
@@ -371,6 +377,11 @@ public class GameManager : MonoBehaviour
             Debug.Log("none tower chosen");
             currTowerType = Towers.None;
         }
+    }
+
+    private void ClickFireTower()
+    {
+        ClickTower(Towers.FireTower);
     }
 
     private GameObject MakeTower()
@@ -381,17 +392,17 @@ public class GameManager : MonoBehaviour
 
     private void ClickWaterTower()
     {
-        throw new NotImplementedException();
+        ClickTower(Towers.WaterTower);
     }
 
     private void ClickEarthTower()
     {
-        throw new NotImplementedException();
+        ClickTower(Towers.EarthTower);
     }
 
     private void ClickWindTower()
     {
-        throw new NotImplementedException();
+        ClickTower(Towers.WindTower);
     }
 
     #endregion private functions

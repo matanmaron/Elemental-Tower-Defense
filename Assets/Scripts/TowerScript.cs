@@ -12,6 +12,9 @@ public class TowerScript : MonoBehaviour
     internal int Cost;
 
     [SerializeField]
+    private int Power;
+
+    [SerializeField]
     ParticleSystem field;
 
     [SerializeField]
@@ -93,7 +96,7 @@ public class TowerScript : MonoBehaviour
 
     private void Shoot(EnemyScript enemy)
     {
-        enemy.TakeDamage(1);
+        enemy.TakeDamage(Power);
     }
 
     private void ShootFire()
