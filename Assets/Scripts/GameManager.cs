@@ -33,6 +33,10 @@ public class GameManager : MonoBehaviour
     private EnemyScript Enemy1Spiders;
     [SerializeField]
     private Text TimerText;
+    [SerializeField]
+    private Text MoneyText;
+    [SerializeField]
+    private Text HealthText;
 
     public List<EnemyScript> Enemys;
     #endregion PublicFields
@@ -43,7 +47,10 @@ public class GameManager : MonoBehaviour
     private Towers currTowerType;
     private GameObject currTower;
     private float Timer;
-    private int Money;
+
+    internal int Life;
+    internal int Money;
+
     #endregion PrivateFields
 
     #region enums
@@ -66,7 +73,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
 	{
-        Money = 0;
+        Money = 10;
+        Life = 5;
         TimerText.text = string.Empty;
         currTowerType = Towers.None;
         currTower = null;
@@ -75,12 +83,34 @@ public class GameManager : MonoBehaviour
         Enemys = new List<EnemyScript>();
 		TogglePause();
         SetTimer();
+        SetMoney();
+        SetHealth();
 	}
 
     private void SetTimer()
     {
         Timer = 5f;
         TimerText.text = Timer.ToString();
+    }
+
+    internal void SetMoney()
+    {
+        MoneyText.text = Money.ToString();
+    }
+
+    internal void SetHealth()
+    {
+        HealthText.text = Life.ToString();
+        if (Life<=0)
+        {
+            GameOver();
+        }
+    }
+
+    private void GameOver()
+    {
+        Debug.Log("GameOver");
+        TogglePause();
     }
 
     private void SpawnWave()
@@ -207,12 +237,18 @@ public class GameManager : MonoBehaviour
 
     private void SetTower(GameObject Tower)
     {
-        var t = Instantiate(Tower);
-        t.transform.position = GetMouseOnScreen();
-        //t.transform.position = currTower.transform.position;
-        Destroy(currTower);
-        currTower = null;
-        currTowerType = Towers.None;
+        var cost = Tower.GetComponent<TowerScript>().Cost;
+        if (Money - cost >= 0)
+        {
+            var t = Instantiate(Tower);
+            t.transform.position = GetMouseOnScreen();
+            //t.transform.position = currTower.transform.position;
+            Destroy(currTower);
+            currTower = null;
+            currTowerType = Towers.None;
+            Money -= cost;
+            SetMoney();
+        }
     }
 
     private void LateUpdate()

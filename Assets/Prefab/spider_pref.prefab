@@ -1116,6 +1116,7 @@ MonoBehaviour:
     type: 3}
   HealthBar: {fileID: 3582234329142622335}
   StartHealth: 10
+  Worth: 1
 --- !u!54 &7646550623155307983
 Rigidbody:
   m_ObjectHideFlags: 0

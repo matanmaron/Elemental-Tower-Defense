@@ -9,6 +9,9 @@ public class TowerScript : MonoBehaviour
     private double Range;
 
     [SerializeField]
+    internal int Cost;
+
+    [SerializeField]
     ParticleSystem field;
 
     [SerializeField]

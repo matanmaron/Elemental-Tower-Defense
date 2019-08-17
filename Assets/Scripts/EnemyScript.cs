@@ -21,6 +21,10 @@ public class EnemyScript : MonoBehaviour
     private Animator anim;
 
     private float Health;
+
+    [SerializeField]
+    internal int Worth;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,8 +45,21 @@ public class EnemyScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        CheckCollider();
     }
+
+    private void CheckCollider()
+    {
+        if (Vector3.Distance(transform.position, EndPoint.transform.position) < 3)
+        {
+            gameManager.RemoveEnemy(enemy);
+            gameManager.Life--;
+            Destroy(enemy);
+            gameManager.SetHealth();
+        }
+    }
+
+
     private void GoToTarget()
     {
         Nav.SetDestination(EndPoint.transform.position);
@@ -63,8 +80,10 @@ public class EnemyScript : MonoBehaviour
 
     private void Die()
     {
+        gameManager.Money += enemy.GetComponent<EnemyScript>().Worth;
         gameManager.RemoveEnemy(enemy);
         Destroy(enemy);
+        gameManager.SetMoney();
     }
 
 }
