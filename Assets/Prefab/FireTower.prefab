@@ -536,6 +536,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Range: 250
+  Cost: 5
   field: {fileID: 1317948382572127969}
   fire: {fileID: 3916152109325063451}
   fireHolder: {fileID: 7309956189620724204}

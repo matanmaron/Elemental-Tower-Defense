@@ -32,6 +32,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private EnemyScript Enemy1Spiders;
     [SerializeField]
+    private EnemyScript Enemy2Pirates;
+    [SerializeField]
     private Text TimerText;
     [SerializeField]
     private Text MoneyText;
@@ -47,6 +49,10 @@ public class GameManager : MonoBehaviour
     private Towers currTowerType;
     private GameObject currTower;
     private float Timer;
+    private bool RunNextWave;
+    private bool StartTimer;
+    private bool RunTimer;
+    private int wave;
 
     internal int Life;
     internal int Money;
@@ -73,6 +79,10 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
 	{
+        wave = 1;
+        RunNextWave = true;
+        StartTimer = true;
+        RunTimer = false;
         Money = 10;
         Life = 5;
         TimerText.text = string.Empty;
@@ -82,7 +92,6 @@ public class GameManager : MonoBehaviour
 		isPaused = false;
         Enemys = new List<EnemyScript>();
 		TogglePause();
-        SetTimer();
         SetMoney();
         SetHealth();
 	}
@@ -115,29 +124,24 @@ public class GameManager : MonoBehaviour
 
     private void SpawnWave()
     {
-        if (!isPaused)
+        RunNextWave = false;
+        int sec = 0;
+        for (int i = 0; i < WaveSize; i++)
         {
-            if(Timer < 0)
-            {
-                TimerText.text = string.Empty;
-                int sec = 0;
-                for (int i = 0; i < WaveSize; i++)
-                {
-                    Invoke("SpawnEnemys",sec);
-                    sec+=4;
-                }
-            }
-            else
-            {
-                Timer -= Time.deltaTime; 
-                TimerText.text = Timer.ToString();
-            }
+            Invoke("SpawnEnemys",sec);
+            sec+=4;
         }
     }
 
     private void SpawnEnemys()
     {
-        Enemys.Add(Instantiate(Enemy1Spiders,StartPoint.transform.position,StartPoint.transform.rotation));
+        switch (wave)
+        {
+            case 1: Enemys.Add(Instantiate(Enemy1Spiders,StartPoint.transform.position,StartPoint.transform.rotation)); break;
+            case 2: Enemys.Add(Instantiate(Enemy2Pirates, StartPoint.transform.position, StartPoint.transform.rotation)); break;
+            default:
+                break;
+        }
     }
 
     private void TogglePause()
@@ -175,11 +179,42 @@ public class GameManager : MonoBehaviour
             }
         }
         //spawn enemys
-        if(Enemys.Count < 1)
-        {
-           SpawnWave();
-        }
+        CheckTimerAndWave();
 	}
+
+    private void CheckTimerAndWave()
+    {
+        if (!isPaused)
+        {
+            if (StartTimer && RunNextWave)
+            {
+                SetTimer();
+                RunTimer = true;
+                StartTimer = false;
+            }
+            else if (RunTimer)
+            {
+                if (Timer>0)
+                {
+                    Timer -= Time.deltaTime;
+                    TimerText.text = Timer.ToString();
+                }
+                else
+                {
+                    TimerText.text = string.Empty;
+                    SpawnWave();
+                    RunTimer = false;
+                }
+            }
+            else if(Enemys.Count < 1)
+            {
+                RunNextWave = true;
+                //next wave
+                StartTimer = true;
+                wave++;
+            }
+        }
+    }
 
     private void CastRay()
     {

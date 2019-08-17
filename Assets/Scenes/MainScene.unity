@@ -2258,9 +2258,10 @@ MonoBehaviour:
   WaveSize: 5
   Enemy1Spiders: {fileID: 6133176647969734030, guid: 33b828b8f1c31334988de54e3fe47ee6,
     type: 3}
+  Enemy2Pirates: {fileID: 592238570, guid: b6a9888115f82ab44a4985a34550b858, type: 3}
   TimerText: {fileID: 74690628}
-  MoneyText: {fileID: 0}
-  HealthText: {fileID: 0}
+  MoneyText: {fileID: 662756672}
+  HealthText: {fileID: 1355839252}
   Enemys: []
 --- !u!4 &1795104864
 Transform:
