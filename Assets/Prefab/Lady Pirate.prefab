@@ -1580,8 +1580,8 @@ MonoBehaviour:
   EndPoint: {fileID: 2506536165306650693, guid: 55e6f14b71de340dcac273f68102dd14,
     type: 3}
   HealthBar: {fileID: 2909913571254446435}
-  StartHealth: 15
-  Worth: 2
+  StartHealth: 20
+  Worth: 3
 --- !u!1 &1933319272724814
 GameObject:
   m_ObjectHideFlags: 0

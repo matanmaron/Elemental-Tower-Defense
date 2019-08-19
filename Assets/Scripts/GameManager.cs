@@ -50,9 +50,13 @@ public class GameManager : MonoBehaviour
     private Text MoneyText;
     [SerializeField]
     private Text HealthText;
+    [SerializeField]
+    private Material green;
+    [SerializeField]
+    private Material red;
+    #endregion PublicFields
 
     public List<EnemyScript> Enemys;
-    #endregion PublicFields
 
     #region PrivateFields
     private bool isFirstBoot;
@@ -67,7 +71,8 @@ public class GameManager : MonoBehaviour
     private bool isGameOver;
     internal int Life;
     internal int Money;
-
+    private bool canbuid;
+    private int rounds;
     #endregion PrivateFields
 
     #region enums
@@ -90,6 +95,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
 	{
+        rounds = 3;
         isGameOver = false;
         panelLose.SetActive(false);
         panelWin.SetActive(false);
@@ -167,8 +173,17 @@ public class GameManager : MonoBehaviour
             case 4: Enemys.Add(Instantiate(Enemy4Barbarian, StartPoint.transform.position, StartPoint.transform.rotation)); break;
             case 5: Enemys.Add(Instantiate(Enemy5Knight, StartPoint.transform.position, StartPoint.transform.rotation)); break;
             default:
-                Debug.Log("no more enemys...");
-                GameOverWin();
+                if (rounds < 1)
+                {
+                    Debug.Log("no more enemys...");
+                    GameOverWin();
+                }
+                else
+                {
+                    wave = 1;
+                    WaveSize += 5;
+                    rounds--;
+                }
                 break;
         }
     }
@@ -211,6 +226,12 @@ public class GameManager : MonoBehaviour
             {
                 CastRay();
             }
+        }
+        if (Input.GetMouseButton(1))
+        {
+            Destroy(currTower);
+            currTower = null;
+            currTowerType = Towers.None;
         }
         //spawn enemys
         CheckTimerAndWave();
@@ -255,7 +276,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("cast ray..");
         var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 1000)) {            
+        if (Physics.Raycast(ray, out hit, 2000f)) {            
             Debug.Log("ray hits: " + hit.collider.gameObject.name);
             var sct = hit.collider.gameObject.GetComponent<TowerScript>();
             if (sct != null)
@@ -271,12 +292,27 @@ public class GameManager : MonoBehaviour
         Vector3 mousePos = new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f);
         Ray ray = Camera.main.ScreenPointToRay(mousePos);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 1000f))
+        if (Physics.Raycast(ray, out hit, 2000f))
         {
             wordPos = hit.point;
+            if (hit.collider.gameObject.tag == "Floor")
+            {
+                //Debug.Log("on floor");
+                canbuid = true;
+                currTower.GetComponent<Renderer>().material = green;
+            }
+            else
+            {
+               // Debug.Log("not on floor " + hit.collider.gameObject.name);
+                canbuid = false;
+                currTower.GetComponent<Renderer>().material = red;
+            }
         }
         else
         {
+            //Debug.Log("not on floor else");
+            canbuid = false;
+            currTower.GetComponent<Renderer>().material = red;
             wordPos = Camera.main.ScreenToWorldPoint(mousePos);
         }
         return wordPos;
@@ -309,17 +345,23 @@ public class GameManager : MonoBehaviour
         var cost = Tower.GetComponent<TowerScript>().Cost;
         if (Money - cost >= 0)
         {
-            var t = Instantiate(Tower);
-            t.transform.position = GetMouseOnScreen();
-            //t.transform.position = currTower.transform.position;
-            Destroy(currTower);
-            currTower = null;
-            currTowerType = Towers.None;
-            Money -= cost;
-            SetMoney();
+            var x = GetMouseOnScreen();
+            if (canbuid)
+            {
+                var t = Instantiate(Tower);
+                t.transform.position = x;
+                //t.transform.position = currTower.transform.position;
+                Destroy(currTower);
+                currTower = null;
+                currTowerType = Towers.None;
+                Money -= cost;
+                SetMoney();
+            }
         }
         else
         {
+            Destroy(currTower);
+            canbuid = false;
             currTower = null;
             currTowerType = Towers.None;
         }
@@ -386,7 +428,6 @@ public class GameManager : MonoBehaviour
 
     private GameObject MakeTower()
     {
-
         return Instantiate(TowerBuild, new Vector3(0,0,0), Quaternion.identity);
     }
 

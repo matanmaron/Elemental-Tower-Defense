@@ -68,12 +68,12 @@ public class EnemyScript : MonoBehaviour
     internal void TakeDamage(int amount)
     {
         Health -= amount;
-        Debug.Log("health is " + Health);
+        //Debug.Log("health is " + Health);
         HealthBar.fillAmount = Health / StartHealth;
 
         if (Health <= 0f)
         {
-            Debug.Log("dead...");
+            //Debug.Log("dead...");
             Die();
         }
     }

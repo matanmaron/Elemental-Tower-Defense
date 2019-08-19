@@ -23,6 +23,9 @@ public class TowerScript : MonoBehaviour
     [SerializeField]
     Transform fireHolder;
 
+    [SerializeField]
+    AudioSource fireSound;
+
     private bool ShowField;
     private GameManager gameManager;
     private bool Reloaded;
@@ -96,6 +99,7 @@ public class TowerScript : MonoBehaviour
 
     private void Shoot(EnemyScript enemy)
     {
+        fireSound.Play();
         enemy.TakeDamage(Power);
     }
 
