@@ -413,11 +413,27 @@ public class GameManager : MonoBehaviour
             Debug.Log("Fire tower chosen");
             currTowerType = clicktype;
             currTower = MakeTower();
+            SetField();
         }
         else
         {
             Debug.Log("none tower chosen");
             currTowerType = Towers.None;
+        }
+    }
+
+    private void SetField()
+    {
+        var psfire = currTower.transform.GetChild(0).GetComponentInChildren<ParticleSystem>();
+        var psearth = currTower.transform.GetChild(1).GetComponentInChildren<ParticleSystem>();
+        var pswater = currTower.transform.GetChild(2).GetComponentInChildren<ParticleSystem>();
+        var pswind = currTower.transform.GetChild(3).GetComponentInChildren<ParticleSystem>();
+        switch (currTowerType)
+        {
+            case (Towers.FireTower): psfire.Play(); break;
+            case (Towers.EarthTower): psearth.Play(); break;
+            case (Towers.WaterTower): pswater.Play(); break;
+            case (Towers.WindTower): pswind.Play(); break;
         }
     }
 
