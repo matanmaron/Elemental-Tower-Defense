@@ -180,7 +180,7 @@ public class GameManager : MonoBehaviour
                 }
                 else
                 {
-                    wave = 1;
+                    wave = 0;
                     WaveSize += 5;
                     rounds--;
                 }
